@@ -5,14 +5,24 @@ use std::path::Path;
 fn main() {
     let mut current_sum = 0;
     let mut biggest_sum = 0;
+    let mut second_biggest_sum = 0;
+    let mut third_biggest_sum = 0;
 
     if let Ok(lines) = read_lines("./input.txt") {
         // Consumes the iterator, returns an (Optional) String
         for line in lines {
             if let Ok(line_content) = line {
                 if line_content == "" {
+                    // Update the three biggest sums if a bigger sum has been found
                     if current_sum > biggest_sum {
+                        third_biggest_sum = second_biggest_sum;
+                        second_biggest_sum = biggest_sum;
                         biggest_sum = current_sum;
+                    } else if current_sum > second_biggest_sum {
+                        third_biggest_sum = second_biggest_sum;
+                        second_biggest_sum = current_sum;
+                    } else if current_sum > third_biggest_sum {
+                        third_biggest_sum = current_sum;
                     }
                     current_sum = 0;
                 } else {
@@ -23,6 +33,10 @@ fn main() {
     }
 
     println!("Biggest sum is: {}", biggest_sum);
+    println!(
+        "Sum of the three biggest sums is: {}",
+        biggest_sum + second_biggest_sum + third_biggest_sum
+    );
 }
 
 // Source: https://doc.rust-lang.org/rust-by-example/std_misc/file/read_lines.html
