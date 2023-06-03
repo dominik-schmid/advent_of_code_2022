@@ -3,11 +3,11 @@ use std::io::{self, BufRead};
 use std::path::Path;
 
 fn main() {
-    day_1_solution();
-    day_2_solution();
+    first_challenge_solution();
+    second_challenge_solution();
 }
 
-fn day_1_solution() {
+fn first_challenge_solution() {
     let mut score = 0;
 
     if let Ok(lines) = read_lines("./input.txt") {
@@ -43,7 +43,7 @@ fn day_1_solution() {
     println!("My score is: {}", score);
 }
 
-fn day_2_solution() {
+fn second_challenge_solution() {
     let mut score = 0;
 
     if let Ok(lines) = read_lines("./input.txt") {
