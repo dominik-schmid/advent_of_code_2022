@@ -1,13 +1,16 @@
+use std::cmp;
 use std::fs::File;
 use std::io::{self, BufRead};
 use std::path::Path;
 
 fn main() {
-    first_challenge_solution();
+    check_for_overlapping();
 }
 
-fn first_challenge_solution() {
+fn check_for_overlapping() {
     let mut fully_contained = 0;
+    let mut overlapping = 0;
+
     if let Ok(lines) = read_lines("./input.txt") {
         // Consumes the iterator, returns an (Optional) String
         for line in lines {
@@ -18,18 +21,22 @@ fn first_challenge_solution() {
                     .map(|i| i.parse::<u16>().unwrap())
                     .collect();
 
-                // Check if one pair is fully contained in the other one.
+                // Check if one pair is fully contained in the other one
                 if (numbers[0] >= numbers[2] && numbers[1] <= numbers[3])
                     || (numbers[2] >= numbers[0] && numbers[3] <= numbers[1])
                 {
                     fully_contained += 1;
+                    overlapping += 1;
+                // Check if one pair overlaps with the other one
+                } else if cmp::max(numbers[0], numbers[2]) <= cmp::min(numbers[1], numbers[3]) {
+                    overlapping += 1;
                 }
             }
         }
 
         println!(
-            "There are {} pairs fully contained in the other pair.",
-            fully_contained
+            "There are {} pairs fully contained in the other pair and {} pairs are overlapping.",
+            fully_contained, overlapping
         );
     }
 }
