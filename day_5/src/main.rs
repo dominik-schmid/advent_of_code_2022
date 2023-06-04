@@ -12,17 +12,7 @@ fn first_challenge_solution() {
     if let Ok(lines) = read_lines("./input.txt") {
         let mut line_counter = 0;
         // VecDeques are used because during creation we want to add the characters at the front
-        let mut crates: [VecDeque<char>; 9] = [
-            VecDeque::new(),
-            VecDeque::new(),
-            VecDeque::new(),
-            VecDeque::new(),
-            VecDeque::new(),
-            VecDeque::new(),
-            VecDeque::new(),
-            VecDeque::new(),
-            VecDeque::new(),
-        ];
+        let mut crates: [VecDeque<char>; 9] = Default::default();
 
         for line in lines {
             if let Ok(line_content) = line {
@@ -59,17 +49,7 @@ fn second_challenge_solution() {
     if let Ok(lines) = read_lines("./input.txt") {
         let mut line_counter = 0;
         // VecDeques are used because during creation we want to add the characters at the front
-        let mut crates: [VecDeque<char>; 9] = [
-            VecDeque::new(),
-            VecDeque::new(),
-            VecDeque::new(),
-            VecDeque::new(),
-            VecDeque::new(),
-            VecDeque::new(),
-            VecDeque::new(),
-            VecDeque::new(),
-            VecDeque::new(),
-        ];
+        let mut crates: [VecDeque<char>; 9] = Default::default();
 
         for line in lines {
             if let Ok(line_content) = line {
