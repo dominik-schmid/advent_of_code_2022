@@ -78,11 +78,73 @@ fn first_challenge_solution() {
 }
 
 fn second_challenge_solution() {
-    // if let Ok(lines) = read_lines("./input.txt") {
-    //     for line in lines {
-    //         if let Ok(line_content) = line {}
-    //     }
-    // }
+    if let Ok(lines) = read_lines("./input.txt") {
+        let mut line_counter = 0;
+        // VecDeques are used because during creation we want to add the characters at the front
+        let mut crates: [VecDeque<char>; 9] = [
+            VecDeque::new(),
+            VecDeque::new(),
+            VecDeque::new(),
+            VecDeque::new(),
+            VecDeque::new(),
+            VecDeque::new(),
+            VecDeque::new(),
+            VecDeque::new(),
+            VecDeque::new(),
+        ];
+
+        for line in lines {
+            if let Ok(line_content) = line {
+                // Hard-coded way of determining in which line we are
+                // < 8 => crates
+                // > 9 => operations
+
+                // Get initial crate configuration
+                if line_counter < 8 {
+                    for (i, c) in line_content.chars().into_iter().enumerate() {
+                        // Only get the characters at the location where characters can appear and
+                        // check if it's a character (!= whitespace).
+                        if [1, 5, 9, 13, 17, 21, 25, 29, 33].contains(&i) && !c.is_whitespace() {
+                            // Add new character at the front of the vector so we can get the last
+                            // element of it, like in a stack, later.
+                            crates[(i - 1) / 4].push_front(c);
+                        }
+                    }
+
+                // Get operations
+                } else if line_counter > 9 {
+                    // Get the numbers and filter out the operations
+                    let operations: Vec<u8> = line_content
+                        .split(' ')
+                        .enumerate()
+                        .filter_map(|(i, n)| {
+                            // Filter out the operations, i.e. every element with an even index
+                            if i % 2 == 0 {
+                                None
+                            } else {
+                                Some(n.parse::<u8>().unwrap())
+                            }
+                        })
+                        .collect();
+
+                    // Move number of crates (operations[0]) from source (operations[1] - 1) to target (operations[2] - 1)
+                    let split_at_index =
+                        crates[operations[1] as usize - 1].len() - operations[0] as usize;
+                    let mut moved_elements =
+                        crates[operations[1] as usize - 1].split_off(split_at_index);
+                    crates[operations[2] as usize - 1].append(&mut moved_elements);
+                }
+            }
+
+            line_counter += 1;
+        }
+
+        let mut solution: String = String::from("");
+        for i in 0..crates.len() {
+            solution.push(*crates[i].back().unwrap());
+        }
+        println!("Solution of second challenge: {}", solution);
+    }
 }
 
 // Source: https://doc.rust-lang.org/rust-by-example/std_misc/file/read_lines.html
