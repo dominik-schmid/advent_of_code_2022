@@ -32,7 +32,7 @@ fn first_challenge_solution() {
                 if line_counter < 8 {
                     for (i, c) in line_content.chars().into_iter().enumerate() {
                         // Only get the characters at the location where characters can appear and
-                        // check if is a character (!= whitespace).
+                        // check if it's a character (!= whitespace).
                         if [1, 5, 9, 13, 17, 21, 25, 29, 33].contains(&i) && !c.is_whitespace() {
                             crates[(i - 1) / 4].push(c);
                         }
