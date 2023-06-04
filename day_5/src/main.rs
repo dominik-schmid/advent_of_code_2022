@@ -1,3 +1,4 @@
+use std::collections::VecDeque;
 use std::fs::File;
 use std::io::{self, BufRead};
 use std::path::Path;
@@ -10,16 +11,17 @@ fn main() {
 fn first_challenge_solution() {
     if let Ok(lines) = read_lines("./input.txt") {
         let mut line_counter = 0;
-        let mut crates: [Vec<char>; 9] = [
-            vec![],
-            vec![],
-            vec![],
-            vec![],
-            vec![],
-            vec![],
-            vec![],
-            vec![],
-            vec![],
+        // VecDeques are used because during creation we want to add the characters at the front
+        let mut crates: [VecDeque<char>; 9] = [
+            VecDeque::new(),
+            VecDeque::new(),
+            VecDeque::new(),
+            VecDeque::new(),
+            VecDeque::new(),
+            VecDeque::new(),
+            VecDeque::new(),
+            VecDeque::new(),
+            VecDeque::new(),
         ];
 
         for line in lines {
@@ -34,7 +36,9 @@ fn first_challenge_solution() {
                         // Only get the characters at the location where characters can appear and
                         // check if it's a character (!= whitespace).
                         if [1, 5, 9, 13, 17, 21, 25, 29, 33].contains(&i) && !c.is_whitespace() {
-                            crates[(i - 1) / 4].push(c);
+                            // Add new character at the front of the vector so we can get the last
+                            // element of it, like in a stack, later.
+                            crates[(i - 1) / 4].push_front(c);
                         }
                     }
 
@@ -53,22 +57,32 @@ fn first_challenge_solution() {
                             }
                         })
                         .collect();
-                    println!("{:?}", operations);
+
+                    // Move number of crates (operations[0]) from source (operations[1] - 1) to target (operations[2] - 1)
+                    for _ in 0..operations[0] {
+                        let moved_element = crates[operations[1] as usize - 1].pop_back().unwrap();
+                        crates[operations[2] as usize - 1].push_back(moved_element);
+                    }
                 }
             }
 
             line_counter += 1;
         }
-        println!("crates: {:?}", crates);
+
+        let mut solution: String = String::from("");
+        for i in 0..crates.len() {
+            solution.push(*crates[i].back().unwrap());
+        }
+        println!("Solution of first challenge: {}", solution);
     }
 }
 
 fn second_challenge_solution() {
-    if let Ok(lines) = read_lines("./input.txt") {
-        for line in lines {
-            if let Ok(line_content) = line {}
-        }
-    }
+    // if let Ok(lines) = read_lines("./input.txt") {
+    //     for line in lines {
+    //         if let Ok(line_content) = line {}
+    //     }
+    // }
 }
 
 // Source: https://doc.rust-lang.org/rust-by-example/std_misc/file/read_lines.html
